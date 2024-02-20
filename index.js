@@ -24,7 +24,7 @@ io.on('connection', (socket) => {
 });
 
 const PORT = process.env.PORT || 3000; // Use a porta definida pelo ambiente ou 3000 como padrão
-const IP_ADDRESS = '192.168.0.246'; // Escute em todas as interfaces de rede
+const IP_ADDRESS = '0.0.0.0'; // Escute em todas as interfaces de rede
 
 server.listen(PORT, IP_ADDRESS, () => {
   console.log(`Servidor rodando em http://${IP_ADDRESS}:${PORT}`);
