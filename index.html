@@ -22,11 +22,11 @@
     var socket = io();
 
     document.getElementById('form').addEventListener('submit', function(event) {
-      event.preventDefault(); // Prevent form submission
+      event.preventDefault(); // Evita a recarga da página
       var input = document.getElementById('m');
-      if (input.value.trim() !== '') { // Check if input is not empty
+      if (input.value.trim() !== '') { // Verifica se o campo de entrada não está vazio
         socket.emit('chat message', input.value);
-        input.value = ''; // Clear input field after sending
+        input.value = ''; // Limpa o campo de entrada após o envio da mensagem
       }
     });
 
