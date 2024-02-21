@@ -11,6 +11,9 @@
     #messages { list-style-type: none; margin: 0; padding: 0; }
     #messages li { padding: 5px 10px; }
     #messages li:nth-child(odd) { background: #eee; }
+
+    #activeUsers { list-style-type: none; margin: 0; padding: 0; }
+    #activeUsers li { padding: 5px 10px; }
   </style>
 </head>
 <body>
@@ -27,6 +30,7 @@
       <button>Enviar</button>
       <button type="button" onclick="clearMessages()">Apagar Todas</button>
     </form>
+    <ul id="activeUsers"></ul>
   </div>
 
   <div id="schedule">
@@ -99,6 +103,16 @@
       item.textContent = `SISTEMA: ${who} coringou e apagou todas as mensagens`;
       document.getElementById('messages').appendChild(item);
       window.scrollTo(0, document.body.scrollHeight);
+    });
+
+    socket.on('active users', function(users) {
+      var activeUsersList = document.getElementById('activeUsers');
+      activeUsersList.innerHTML = '';
+      users.forEach(function(user) {
+        var item = document.createElement('li');
+        item.textContent = user;
+        activeUsersList.appendChild(item);
+      });
     });
 
     // Horário
