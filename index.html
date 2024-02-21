@@ -1,4 +1,3 @@
-<!-- index.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -12,27 +11,58 @@
   </style>
 </head>
 <body>
-  <ul id="messages"></ul>
-  <form id="form" action="">
-    <input id="m" autocomplete="off" /><button>Send</button>
-  </form>
+  <div id="login">
+    <input type="text" id="usernameInput" placeholder="Enter your username">
+    <button onclick="submitUsername()">Submit</button>
+  </div>
+
+  <div id="chat" style="display: none;">
+    <ul id="messages"></ul>
+    <form id="form" action="">
+      <input id="m" autocomplete="off" />
+      <input type="file" id="mediaInput">
+      <button>Send</button>
+    </form>
+  </div>
   
   <script src="/socket.io/socket.io.js"></script>
   <script>
     var socket = io();
+    var username;
+
+    function submitUsername() {
+      var usernameInput = document.getElementById('usernameInput');
+      if (usernameInput.value.trim() !== '') {
+        username = usernameInput.value.trim();
+        document.getElementById('login').style.display = 'none';
+        document.getElementById('chat').style.display = 'block';
+      }
+    }
 
     document.getElementById('form').addEventListener('submit', function(event) {
       event.preventDefault(); // Prevent form submission
       var input = document.getElementById('m');
-      if (input.value.trim() !== '') { // Check if input is not empty
-        socket.emit('chat message', input.value);
+      var mediaInput = document.getElementById('mediaInput');
+      if (input.value.trim() !== '' || mediaInput.files.length > 0) {
+        var message = {
+          username: username,
+          text: input.value.trim(),
+          media: mediaInput.files[0] || null
+        };
+        socket.emit('chat message', message);
         input.value = ''; // Clear input field after sending
+        mediaInput.value = ''; // Clear media input field after sending
       }
     });
 
     socket.on('chat message', function(msg) {
       var item = document.createElement('li');
-      item.textContent = msg;
+      var content = '';
+      if (msg.media) {
+        content += `<img src="${URL.createObjectURL(msg.media)}" alt="Media">`;
+      }
+      content += `<strong>${msg.username}:</strong> ${msg.text}`;
+      item.innerHTML = content;
       document.getElementById('messages').appendChild(item);
       window.scrollTo(0, document.body.scrollHeight);
     });
