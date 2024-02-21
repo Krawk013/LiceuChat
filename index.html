@@ -30,7 +30,7 @@
       <button>Enviar</button>
       <button type="button" onclick="clearMessages()">Apagar Todas</button>
     </form>
-    <ul id="activeUsers"></ul>
+    <ul id="activeUsers"></ul> <!-- Lista de usuários ativos -->
   </div>
 
   <div id="schedule">
@@ -123,7 +123,7 @@
       var minutes = now.getMinutes();
       var classTime = '';
 
-switch (dayOfWeek) {
+      switch (dayOfWeek) {
         case 1: // Monday
           if ((hours == 7 && minutes >= 30) || (hours > 7 && hours < 12)) {
             classTime = 'Literatura';
@@ -139,7 +139,7 @@ switch (dayOfWeek) {
             classTime = 'Biologia';
           }
           break;
-  case 2: // Tuesday
+          case 2: // Tuesday
     if ((hours == 7 && minutes >= 30) || (hours > 7 && hours < 8)) {
       classTime = 'Física';
     } else if ((hours == 8 && minutes >= 20) || (hours > 8 && hours < 9)) {
