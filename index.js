@@ -1,17 +1,24 @@
 const express = require('express');
 const http = require('http');
 const socketIo = require('socket.io');
-const multer = require('multer'); // Adicionando o multer para lidar com o upload de arquivos
 const fs = require('fs');
 
 const app = express();
 const server = http.createServer(app);
 const io = socketIo(server);
 
-let messages = [];
+// Instalação do multer dentro do código
+const npm = require('npm-programmatic');
 
-// Configurando o multer para salvar os arquivos na pasta 'uploads'
-const upload = multer({ dest: 'uploads/' });
+npm.install(['multer'], {
+  cwd: __dirname
+}).then(() => {
+  console.log('multer installed successfully');
+}).catch((error) => {
+  console.error('Error installing multer:', error);
+});
+
+let messages = [];
 
 app.get('/', (req, res) => {
   res.sendFile(__dirname + '/index.html');
@@ -31,15 +38,6 @@ io.on('connection', (socket) => {
   socket.on('disconnect', () => {
     console.log('Usuário desconectado');
   });
-});
-
-// Rota para lidar com o upload de mídia
-app.post('/upload', upload.single('media'), (req, res) => {
-  const file = req.file;
-  if (!file) {
-    return res.status(400).send('Nenhum arquivo foi enviado.');
-  }
-  res.send(file);
 });
 
 function saveMessages() {
