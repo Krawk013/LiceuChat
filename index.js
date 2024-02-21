@@ -1,22 +1,32 @@
+const { exec } = require('child_process');
+const fs = require('fs');
+
+const installMulter = () => {
+  return new Promise((resolve, reject) => {
+    exec('npm install multer', (error, stdout, stderr) => {
+      if (error) {
+        console.error(`Error installing multer: ${error.message}`);
+        reject(error);
+        return;
+      }
+      if (stderr) {
+        console.error(`Error installing multer: ${stderr}`);
+        reject(stderr);
+        return;
+      }
+      console.log(`multer installed successfully`);
+      resolve();
+    });
+  });
+};
+
 const express = require('express');
 const http = require('http');
 const socketIo = require('socket.io');
-const fs = require('fs');
 
 const app = express();
 const server = http.createServer(app);
 const io = socketIo(server);
-
-// Instalação do multer dentro do código
-const npm = require('npm-programmatic');
-
-npm.install(['multer'], {
-  cwd: __dirname
-}).then(() => {
-  console.log('multer installed successfully');
-}).catch((error) => {
-  console.error('Error installing multer:', error);
-});
 
 let messages = [];
 
@@ -54,3 +64,5 @@ const PORT = process.env.PORT || 8080;
 server.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`);
 });
+
+installMulter().catch(err => console.error(err));
