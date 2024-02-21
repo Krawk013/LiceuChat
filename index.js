@@ -1,6 +1,7 @@
 const { exec } = require('child_process');
 const fs = require('fs');
 
+// Função para instalar o multer
 const installMulter = () => {
   return new Promise((resolve, reject) => {
     exec('npm install multer', (error, stdout, stderr) => {
@@ -19,6 +20,17 @@ const installMulter = () => {
     });
   });
 };
+
+// Função para salvar as mensagens no arquivo
+function saveMessages() {
+  fs.writeFile('messages.json', JSON.stringify(messages), (err) => {
+    if (err) {
+      console.error('Error saving messages:', err);
+    } else {
+      console.log('Messages saved successfully.');
+    }
+  });
+}
 
 const express = require('express');
 const http = require('http');
@@ -63,16 +75,6 @@ io.on('connection', (socket) => {
     console.log('Usuário desconectado');
   });
 });
-
-function saveMessages() {
-  fs.writeFile('messages.json', JSON.stringify(messages), (err) => {
-    if (err) {
-      console.error('Error saving messages:', err);
-    } else {
-      console.log('Messages saved successfully.');
-    }
-  });
-}
 
 const PORT = process.env.PORT || 8080;
 server.listen(PORT, () => {
