@@ -30,6 +30,7 @@
   <script>
     var socket = io();
     var username;
+    var password = '0508';
 
     function submitUsername() {
       var usernameInput = document.getElementById('usernameInput');
@@ -41,8 +42,16 @@
     }
 
     function clearMessages() {
-      socket.emit('clear messages');
-      document.getElementById('messages').innerHTML = ''; // Clear messages on client side
+      var pass = prompt("Por favor, insira a senha para apagar todas as mensagens:");
+      if (pass === password) {
+        var confirmation = confirm("Tem certeza de que deseja apagar todas as mensagens?");
+        if (confirmation) {
+          socket.emit('clear messages', username);
+          document.getElementById('messages').innerHTML = ''; // Clear messages on client side
+        }
+      } else {
+        alert("Senha incorreta!");
+      }
     }
 
     document.getElementById('form').addEventListener('submit', function(event) {
@@ -69,6 +78,13 @@
       }
       content += `<strong>${msg.username}:</strong> ${msg.text}`;
       item.innerHTML = content;
+      document.getElementById('messages').appendChild(item);
+      window.scrollTo(0, document.body.scrollHeight);
+    });
+
+    socket.on('clear messages', function(who) {
+      var item = document.createElement('li');
+      item.textContent = `SISTEMA: ${who} apagou todas as mensagens`;
       document.getElementById('messages').appendChild(item);
       window.scrollTo(0, document.body.scrollHeight);
     });
