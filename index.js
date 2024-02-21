@@ -30,6 +30,20 @@ const io = socketIo(server);
 
 let messages = [];
 
+// Carregar mensagens salvas
+fs.readFile('messages.json', (err, data) => {
+  if (err) {
+    console.error('Error loading messages:', err);
+  } else {
+    try {
+      messages = JSON.parse(data);
+      console.log('Messages loaded successfully.');
+    } catch (error) {
+      console.error('Error parsing messages:', error);
+    }
+  }
+});
+
 app.get('/', (req, res) => {
   res.sendFile(__dirname + '/index.html');
 });
