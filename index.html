@@ -21,6 +21,7 @@
     <form id="form" enctype="multipart/form-data">
       <input id="m" autocomplete="off" />
       <input type="file" id="mediaInput" accept="image/*, video/*">
+      <input type="url" id="imgUrlInput" placeholder="URL da imagem">
       <button>Enviar</button>
     </form>
   </div>
@@ -43,15 +44,18 @@
       event.preventDefault(); // Prevent form submission
       var input = document.getElementById('m');
       var mediaInput = document.getElementById('mediaInput');
-      if (input.value.trim() !== '' || mediaInput.files.length > 0) {
+      var imgUrlInput = document.getElementById('imgUrlInput');
+      if (input.value.trim() !== '' || mediaInput.files.length > 0 || imgUrlInput.value.trim() !== '') {
         var message = {
           username: username,
           text: input.value.trim(),
-          media: mediaInput.files[0] || null
+          media: mediaInput.files[0] || null,
+          imgUrl: imgUrlInput.value.trim() || null
         };
         socket.emit('chat message', message);
         input.value = ''; // Clear input field after sending
         mediaInput.value = ''; // Clear media input field after sending
+        imgUrlInput.value = ''; // Clear image URL input field after sending
       }
     });
 
@@ -60,6 +64,9 @@
       var content = '';
       if (msg.media) {
         content += `<img src="${URL.createObjectURL(msg.media)}" alt="Media">`;
+      }
+      if (msg.imgUrl) {
+        content += `<br><img src="${msg.imgUrl}" alt="Image">`;
       }
       content += `<strong>${msg.username}:</strong> ${msg.text}`;
       item.innerHTML = content;
