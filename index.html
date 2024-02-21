@@ -5,6 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>O terror de OPT</title>
   <style>
+    body {
+      font-family: Arial, sans-serif;
+    }
     #messages { list-style-type: none; margin: 0; padding: 0; }
     #messages li { padding: 5px 10px; }
     #messages li:nth-child(odd) { background: #eee; }
@@ -24,6 +27,11 @@
       <button>Enviar</button>
       <button type="button" onclick="clearMessages()">Apagar Todas</button>
     </form>
+  </div>
+
+  <div id="schedule">
+    <h2>Horário</h2>
+    <p id="nextClass">Próxima aula: <span id="nextClassTime"></span></p>
   </div>
   
   <script src="/socket.io/socket.io.js"></script>
@@ -92,6 +100,95 @@
       document.getElementById('messages').appendChild(item);
       window.scrollTo(0, document.body.scrollHeight);
     });
+
+    // Horário
+    function getNextClass() {
+      var now = new Date();
+      var dayOfWeek = now.getDay();
+      var hours = now.getHours();
+      var minutes = now.getMinutes();
+      var classTime = '';
+
+switch (dayOfWeek) {
+  case 1: // Monday
+    // Implementar para segunda-feira
+    break;
+  case 2: // Tuesday
+    if ((hours == 7 && minutes >= 30) || (hours > 7 && hours < 8)) {
+      classTime = 'Física';
+    } else if ((hours == 8 && minutes >= 20) || (hours > 8 && hours < 9)) {
+      classTime = 'Matemática';
+    } else if ((hours == 9 && minutes >= 10) || (hours > 9 && hours < 9)) {
+      classTime = 'Biologia';
+    } else if ((hours == 9 && minutes >= 25) || (hours > 9 && hours < 10)) {
+      classTime = 'LP-G';
+    } else if ((hours == 10 && minutes >= 15) || (hours > 10 && hours < 11)) {
+      classTime = 'Língua Inglesa';
+    } else if ((hours == 11 && minutes >= 20) || (hours > 11 && hours < 12)) {
+      classTime = 'Física';
+    }
+    break;
+  case 3: // Wednesday
+    if ((hours == 7 && minutes >= 30) || (hours > 7 && hours < 8)) {
+      classTime = 'Literatura';
+    } else if ((hours == 8 && minutes >= 20) || (hours > 8 && hours < 9)) {
+      classTime = 'Matemática';
+    } else if ((hours == 9 && minutes >= 10) || (hours > 9 && hours < 9)) {
+      classTime = 'ER';
+    } else if ((hours == 9 && minutes >= 25) || (hours > 9 && hours < 10)) {
+      classTime = 'Língua Inglesa';
+    } else if ((hours == 10 && minutes >= 15) || (hours > 10 && hours < 11)) {
+      classTime = 'Física';
+    } else if ((hours == 11 && minutes >= 20) || (hours > 11 && hours < 12)) {
+      classTime = 'Química';
+    }
+    break;
+  case 4: // Thursday
+    if ((hours == 7 && minutes >= 30) || (hours > 7 && hours < 8)) {
+      classTime = 'OPT';
+    } else if ((hours == 8 && minutes >= 20) || (hours > 8 && hours < 9)) {
+      classTime = 'OPT';
+    } else if ((hours == 9 && minutes >= 10) || (hours > 9 && hours < 9)) {
+      classTime = 'CH-GEO';
+    } else if ((hours == 9 && minutes >= 25) || (hours > 9 && hours < 10)) {
+      classTime = 'QUI';
+    } else if ((hours == 10 && minutes >= 25) || (hours > 10 && hours < 11)) {
+      classTime = 'MAT';
+    } else if ((hours == 11 && minutes >= 20) || (hours > 11 && hours < 12)) {
+      classTime = 'MAT';
+    }
+    break;
+  case 5: // Friday
+    if ((hours == 7 && minutes >= 30) || (hours > 7 && hours < 8)) {
+      classTime = 'Química';
+    } else if ((hours == 8 && minutes >= 20) || (hours > 8 && hours < 9)) {
+      classTime = 'Biologia';
+    } else if ((hours == 9 && minutes >= 10) || (hours > 9 && hours < 9)) {
+      classTime = 'CH-SOC';
+    } else if ((hours == 9 && minutes >= 25) || (hours > 9 && hours < 10)) {
+      classTime = 'História';
+    } else if ((hours == 10 && minutes >= 25) || (hours > 10 && hours < 11)) {
+      classTime = 'História';
+    } else if ((hours == 11 && minutes >= 20) || (hours > 11 && hours < 12)) {
+      classTime = 'CH-GEO';
+    }
+    break;
+}
+
+      return classTime;
+    }
+
+    function updateNextClass() {
+      var nextClass = getNextClass();
+      if (nextClass !== '') {
+        document.getElementById('nextClassTime').textContent = nextClass;
+      } else {
+        document.getElementById('nextClassTime').textContent = 'Nenhuma aula programada';
+      }
+    }
+
+    updateNextClass();
+    setInterval(updateNextClass, 60000); // Atualizar a cada minuto
   </script>
 </body>
 </html>
