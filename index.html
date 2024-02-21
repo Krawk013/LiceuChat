@@ -61,7 +61,7 @@
           socket.emit('clear messages', username);
           document.getElementById('messages').innerHTML = ''; // Clear messages on client side
           var item = document.createElement('li');
-          item.textContent = `SISTEMA: ${username} apagou todas as mensagens`;
+          item.textContent = `SISTEMA: ${who} coringou e apagou todas as mensagens`;
           document.getElementById('messages').appendChild(item);
           window.scrollTo(0, document.body.scrollHeight);
         }
