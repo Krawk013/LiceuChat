@@ -22,6 +22,7 @@
       <input id="m" autocomplete="off" />
       <input type="url" id="imgUrlInput" placeholder="URL da imagem">
       <button>Enviar</button>
+      <button type="button" onclick="clearMessages()">Apagar Todas</button>
     </form>
   </div>
   
@@ -37,6 +38,11 @@
         document.getElementById('login').style.display = 'none';
         document.getElementById('chat').style.display = 'block';
       }
+    }
+
+    function clearMessages() {
+      socket.emit('clear messages');
+      document.getElementById('messages').innerHTML = ''; // Clear messages on client side
     }
 
     document.getElementById('form').addEventListener('submit', function(event) {
