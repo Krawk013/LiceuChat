@@ -18,9 +18,9 @@
 
   <div id="chat" style="display: none;">
     <ul id="messages"></ul>
-    <form id="form" action="">
+    <form id="form" enctype="multipart/form-data">
       <input id="m" autocomplete="off" />
-      <input type="file" id="mediaInput">
+      <input type="file" id="mediaInput" accept="image/*, video/*">
       <button>Send</button>
     </form>
   </div>
