@@ -47,11 +47,20 @@ function saveMessages() {
 // Sala "Terror de OPT"
 const terrorDeOPT = io.of('/terror-de-opt');
 let terrorDeOPTMessages = [];
+const terrorDeOPTPassword = 'sonia'; // Senha para a sala Terror de OPT
 
 terrorDeOPT.on('connection', (socket) => {
   console.log('Novo usuário conectado à sala Terror de OPT');
 
-  socket.emit('chat history', terrorDeOPTMessages);
+  // Verificação da senha ao entrar na sala
+  socket.on('enter room', (password) => {
+    if (password === terrorDeOPTPassword) {
+      socket.emit('room entered');
+      socket.emit('chat history', terrorDeOPTMessages);
+    } else {
+      socket.emit('error', 'Senha incorreta para a sala Terror de OPT');
+    }
+  });
 
   socket.on('chat message', (msg) => {
     terrorDeOPTMessages.push(msg);
@@ -67,11 +76,20 @@ terrorDeOPT.on('connection', (socket) => {
 // Sala "Inimigos da Bola"
 const inimigosDaBola = io.of('/inimigos-da-bola');
 let inimigosDaBolaMessages = [];
+const inimigosDaBolaPassword = 'mariana'; // Senha para a sala Inimigos da Bola
 
 inimigosDaBola.on('connection', (socket) => {
   console.log('Novo usuário conectado à sala Inimigos da Bola');
 
-  socket.emit('chat history', inimigosDaBolaMessages);
+  // Verificação da senha ao entrar na sala
+  socket.on('enter room', (password) => {
+    if (password === inimigosDaBolaPassword) {
+      socket.emit('room entered');
+      socket.emit('chat history', inimigosDaBolaMessages);
+    } else {
+      socket.emit('error', 'Senha incorreta para a sala Inimigos da Bola');
+    }
+  });
 
   socket.on('chat message', (msg) => {
     inimigosDaBolaMessages.push(msg);
@@ -83,6 +101,7 @@ inimigosDaBola.on('connection', (socket) => {
     console.log('Usuário desconectado da sala Inimigos da Bola');
   });
 });
+
 
 // Funções para salvar mensagens em arquivos diferentes para cada sala
 function saveTerrorDeOPTMessages() {
