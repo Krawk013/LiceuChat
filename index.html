@@ -37,6 +37,7 @@
         <option value="terror-de-opt">Terror de OPT</option>
         <option value="inimigos-da-bola">Inimigos da Bola</option>
       </select>
+      <input type="password" id="passwordInput" placeholder="Senha da sala">
     </div>
   </div>
 
@@ -49,7 +50,10 @@
   <script>
     var socket = io();
     var username;
-    var password = 'Mariana';
+    var password = {
+      'terror-de-opt': 'sonia',
+      'inimigos-da-bola': 'mariana'
+    };
 
     function submitUsername() {
       var usernameInput = document.getElementById('usernameInput');
@@ -62,7 +66,7 @@
 
     function clearMessages() {
       var pass = prompt("Por favor, insira a senha para apagar todas as mensagens:");
-      if (pass === password) {
+      if (pass === password[document.getElementById('room').value]) {
         var confirmation = confirm("Tem certeza de que deseja apagar todas as mensagens?");
         if (confirmation) {
           socket.emit('clear messages', username);
@@ -78,9 +82,13 @@
     }
 
     function changeRoom() {
-      var room = document.getElementById('room').value;
-      socket.emit('change room', room);
-      document.getElementById('messages').innerHTML = ''; // Clear messages when changing room
+      var pass = prompt("Por favor, insira a senha para entrar na sala:");
+      if (pass === password[document.getElementById('room').value]) {
+        socket.emit('change room', document.getElementById('room').value);
+        document.getElementById('messages').innerHTML = ''; // Clear messages when changing room
+      } else {
+        alert("Senha incorreta!");
+      }
     }
 
     document.getElementById('form').addEventListener('submit', function(event) {
@@ -152,67 +160,67 @@
             classTime = 'Biologia';
           }
           break;
-          case 2: // Tuesday
-    if ((hours == 7 && minutes >= 30) || (hours > 7 && hours < 8)) {
-      classTime = 'Física';
-    } else if ((hours == 8 && minutes >= 20) || (hours > 8 && hours < 9)) {
-      classTime = 'Matemática';
-    } else if ((hours == 9 && minutes >= 10) || (hours > 9 && hours < 9)) {
-      classTime = 'Biologia';
-    } else if ((hours == 9 && minutes >= 25) || (hours > 9 && hours < 10)) {
-      classTime = 'LP-G';
-    } else if ((hours == 10 && minutes >= 15) || (hours > 10 && hours < 11)) {
-      classTime = 'Língua Inglesa';
-    } else if ((hours == 11 && minutes >= 20) || (hours > 11 && hours < 12)) {
-      classTime = 'Física';
-    }
-    break;
-  case 3: // Wednesday
-    if ((hours == 7 && minutes >= 30) || (hours > 7 && hours < 8)) {
-      classTime = 'Literatura';
-    } else if ((hours == 8 && minutes >= 20) || (hours > 8 && hours < 9)) {
-      classTime = 'Matemática';
-    } else if ((hours == 9 && minutes >= 10) || (hours > 9 && hours < 9)) {
-      classTime = 'ER';
-    } else if ((hours == 9 && minutes >= 25) || (hours > 9 && hours < 10)) {
-      classTime = 'Língua Inglesa';
-    } else if ((hours == 10 && minutes >= 15) || (hours > 10 && hours < 11)) {
-      classTime = 'Física';
-    } else if ((hours == 11 && minutes >= 20) || (hours > 11 && hours < 12)) {
-      classTime = 'Química';
-    }
-    break;
-  case 4: // Thursday
-    if ((hours == 7 && minutes >= 30) || (hours > 7 && hours < 8)) {
-      classTime = 'OPT';
-    } else if ((hours == 8 && minutes >= 20) || (hours > 8 && hours < 9)) {
-      classTime = 'OPT';
-    } else if ((hours == 9 && minutes >= 10) || (hours > 9 && hours < 9)) {
-      classTime = 'CH-GEO';
-    } else if ((hours == 9 && minutes >= 25) || (hours > 9 && hours < 10)) {
-      classTime = 'QUI';
-    } else if ((hours == 10 && minutes >= 25) || (hours > 10 && hours < 11)) {
-      classTime = 'MAT';
-    } else if ((hours == 11 && minutes >= 20) || (hours > 11 && hours < 12)) {
-      classTime = 'MAT';
-    }
-    break;
-  case 5: // Friday
-    if ((hours == 7 && minutes >= 30) || (hours > 7 && hours < 8)) {
-      classTime = 'Química';
-    } else if ((hours == 8 && minutes >= 20) || (hours > 8 && hours < 9)) {
-      classTime = 'Biologia';
-    } else if ((hours == 9 && minutes >= 10) || (hours > 9 && hours < 9)) {
-      classTime = 'CH-SOC';
-    } else if ((hours == 9 && minutes >= 25) || (hours > 9 && hours < 10)) {
-      classTime = 'História';
-    } else if ((hours == 10 && minutes >= 25) || (hours > 10 && hours < 11)) {
-      classTime = 'História';
-    } else if ((hours == 11 && minutes >= 20) || (hours > 11 && hours < 12)) {
-      classTime = 'CH-GEO';
-    }
-    break;
-}
+        case 2: // Tuesday
+          if ((hours == 7 && minutes >= 30) || (hours > 7 && hours < 8)) {
+            classTime = 'Física';
+          } else if ((hours == 8 && minutes >= 20) || (hours > 8 && hours < 9)) {
+            classTime = 'Matemática';
+          } else if ((hours == 9 && minutes >= 10) || (hours > 9 && hours < 9)) {
+            classTime = 'Biologia';
+          } else if ((hours == 9 && minutes >= 25) || (hours > 9 && hours < 10)) {
+            classTime = 'LP-G';
+          } else if ((hours == 10 && minutes >= 15) || (hours > 10 && hours < 11)) {
+            classTime = 'Língua Inglesa';
+          } else if ((hours == 11 && minutes >= 20) || (hours > 11 && hours < 12)) {
+            classTime = 'Física';
+          }
+          break;
+        case 3: // Wednesday
+          if ((hours == 7 && minutes >= 30) || (hours > 7 && hours < 8)) {
+            classTime = 'Literatura';
+          } else if ((hours == 8 && minutes >= 20) || (hours > 8 && hours < 9)) {
+            classTime = 'Matemática';
+          } else if ((hours == 9 && minutes >= 10) || (hours > 9 && hours < 9)) {
+            classTime = 'ER';
+          } else if ((hours == 9 && minutes >= 25) || (hours > 9 && hours < 10)) {
+            classTime = 'Língua Inglesa';
+          } else if ((hours == 10 && minutes >= 15) || (hours > 10 && hours < 11)) {
+            classTime = 'Física';
+          } else if ((hours == 11 && minutes >= 20) || (hours > 11 && hours < 12)) {
+            classTime = 'Química';
+          }
+          break;
+        case 4: // Thursday
+          if ((hours == 7 && minutes >= 30) || (hours > 7 && hours < 8)) {
+            classTime = 'OPT';
+          } else if ((hours == 8 && minutes >= 20) || (hours > 8 && hours < 9)) {
+            classTime = 'OPT';
+          } else if ((hours == 9 && minutes >= 10) || (hours > 9 && hours < 9)) {
+            classTime = 'CH-GEO';
+          } else if ((hours == 9 && minutes >= 25) || (hours > 9 && hours < 10)) {
+            classTime = 'QUI';
+          } else if ((hours == 10 && minutes >= 25) || (hours > 10 && hours < 11)) {
+            classTime = 'MAT';
+          } else if ((hours == 11 && minutes >= 20) || (hours > 11 && hours < 12)) {
+            classTime = 'MAT';
+          }
+          break;
+        case 5: // Friday
+          if ((hours == 7 && minutes >= 30) || (hours > 7 && hours < 8)) {
+            classTime = 'Química';
+          } else if ((hours == 8 && minutes >= 20) || (hours > 8 && hours < 9)) {
+            classTime = 'Biologia';
+          } else if ((hours == 9 && minutes >= 10) || (hours > 9 && hours < 9)) {
+            classTime = 'CH-SOC';
+          } else if ((hours == 9 && minutes >= 25) || (hours > 9 && hours < 10)) {
+            classTime = 'História';
+          } else if ((hours == 10 && minutes >= 25) || (hours > 10 && hours < 11)) {
+            classTime = 'História';
+          } else if ((hours == 11 && minutes >= 20) || (hours > 11 && hours < 12)) {
+            classTime = 'CH-GEO';
+          }
+          break;
+      }
 
       return classTime;
     }
