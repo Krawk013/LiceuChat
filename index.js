@@ -22,7 +22,6 @@ const installMulter = () => {
   });
 };
 
-
 // Função para salvar as mensagens no arquivo
 function saveMessages() {
   const messagesPath = path.join('/tmp', 'messages.json'); // Caminho para o diretório temporário
@@ -35,13 +34,76 @@ function saveMessages() {
   });
 }
 
+// Sala "Terror de OPT"
+const terrorDeOPT = io.of('/terror-de-opt');
+let terrorDeOPTMessages = [];
+
+terrorDeOPT.on('connection', (socket) => {
+  console.log('Novo usuário conectado à sala Terror de OPT');
+
+  socket.emit('chat history', terrorDeOPTMessages);
+
+  socket.on('chat message', (msg) => {
+    terrorDeOPTMessages.push(msg);
+    terrorDeOPT.emit('chat message', msg);
+    saveTerrorDeOPTMessages();
+  });
+
+  socket.on('disconnect', () => {
+    console.log('Usuário desconectado da sala Terror de OPT');
+  });
+});
+
+// Sala "Inimigos da Bola"
+const inimigosDaBola = io.of('/inimigos-da-bola');
+let inimigosDaBolaMessages = [];
+
+inimigosDaBola.on('connection', (socket) => {
+  console.log('Novo usuário conectado à sala Inimigos da Bola');
+
+  socket.emit('chat history', inimigosDaBolaMessages);
+
+  socket.on('chat message', (msg) => {
+    inimigosDaBolaMessages.push(msg);
+    inimigosDaBola.emit('chat message', msg);
+    saveInimigosDaBolaMessages();
+  });
+
+  socket.on('disconnect', () => {
+    console.log('Usuário desconectado da sala Inimigos da Bola');
+  });
+});
+
+// Funções para salvar mensagens em arquivos diferentes para cada sala
+function saveTerrorDeOPTMessages() {
+  const messagesPath = path.join('/tmp', 'terror-de-opt-messages.json'); // Caminho para o diretório temporário
+  fs.writeFile(messagesPath, JSON.stringify(terrorDeOPTMessages), (err) => {
+    if (err) {
+      console.error('Error saving Terror de OPT messages:', err);
+    } else {
+      console.log('Terror de OPT messages saved successfully.');
+    }
+  });
+}
+
+function saveInimigosDaBolaMessages() {
+  const messagesPath = path.join('/tmp', 'inimigos-da-bola-messages.json'); // Caminho para o diretório temporário
+  fs.writeFile(messagesPath, JSON.stringify(inimigosDaBolaMessages), (err) => {
+    if (err) {
+      console.error('Error saving Inimigos da Bola messages:', err);
+    } else {
+      console.log('Inimigos da Bola messages saved successfully.');
+    }
+  });
+}
+
 const express = require('express');
 const http = require('http');
 const socketIo = require('socket.io');
 
 const app = express();
 const server = http.createServer(app);
-const io = socketIo(server);
+const io = socketIo(server); 
 
 let messages = [];
 
