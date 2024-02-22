@@ -55,6 +55,7 @@ terrorDeOPT.on('connection', (socket) => {
   // Verificação da senha ao entrar na sala
   socket.on('enter room', (password) => {
     if (password === terrorDeOPTPassword) {
+      socket.join('terror-de-opt'); // Adicionando o usuário à sala
       socket.emit('room entered');
       socket.emit('chat history', terrorDeOPTMessages);
     } else {
@@ -64,7 +65,7 @@ terrorDeOPT.on('connection', (socket) => {
 
   socket.on('chat message', (msg) => {
     terrorDeOPTMessages.push(msg);
-    terrorDeOPT.emit('chat message', msg); // Emitir apenas para a sala Terror de OPT
+    io.to('terror-de-opt').emit('chat message', msg); // Emitir apenas para a sala Terror de OPT
     saveTerrorDeOPTMessages();
   });
 
@@ -84,6 +85,7 @@ inimigosDaBola.on('connection', (socket) => {
   // Verificação da senha ao entrar na sala
   socket.on('enter room', (password) => {
     if (password === inimigosDaBolaPassword) {
+      socket.join('inimigos-da-bola'); // Adicionando o usuário à sala
       socket.emit('room entered');
       socket.emit('chat history', inimigosDaBolaMessages);
     } else {
@@ -93,7 +95,7 @@ inimigosDaBola.on('connection', (socket) => {
 
   socket.on('chat message', (msg) => {
     inimigosDaBolaMessages.push(msg);
-    inimigosDaBola.emit('chat message', msg); // Emitir apenas para a sala Inimigos da Bola
+    io.to('inimigos-da-bola').emit('chat message', msg); // Emitir apenas para a sala Inimigos da Bola
     saveInimigosDaBolaMessages();
   });
 
