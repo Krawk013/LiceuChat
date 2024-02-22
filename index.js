@@ -55,7 +55,7 @@ terrorDeOPT.on('connection', (socket) => {
 
   socket.on('chat message', (msg) => {
     terrorDeOPTMessages.push(msg);
-    terrorDeOPT.emit('chat message', msg);
+    terrorDeOPT.emit('chat message', msg); // Emitir apenas para a sala Terror de OPT
     saveTerrorDeOPTMessages();
   });
 
@@ -75,7 +75,7 @@ inimigosDaBola.on('connection', (socket) => {
 
   socket.on('chat message', (msg) => {
     inimigosDaBolaMessages.push(msg);
-    inimigosDaBola.emit('chat message', msg);
+    inimigosDaBola.emit('chat message', msg); // Emitir apenas para a sala Inimigos da Bola
     saveInimigosDaBolaMessages();
   });
 
