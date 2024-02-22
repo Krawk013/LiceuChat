@@ -4,13 +4,38 @@ const path = require('path');
 
 const express = require('express');
 const http = require('http');
-const socketIo = require('socket.io'); // Importe o socket.io aqui
+const socketIo = require('socket.io');
+const multer = require('multer'); // Adicionando Multer para upload de imagens
 
 const app = express();
 const server = http.createServer(app);
-const io = socketIo(server); // Inicialize o socket.io aqui
+const io = socketIo(server);
 
 let messages = [];
+
+// Configuração do Multer para upload de imagens
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, 'uploads/'); // Diretório onde as imagens serão armazenadas
+  },
+  filename: function (req, file, cb) {
+    cb(null, Date.now() + '-' + file.originalname); // Nome do arquivo (timestamp + nome original)
+  }
+});
+
+const upload = multer({ storage: storage });
+
+// Rota para lidar com o upload de imagens de perfil
+app.post('/upload', upload.single('profileImage'), (req, res, next) => {
+  const file = req.file;
+  if (!file) {
+    const error = new Error('Por favor, selecione um arquivo');
+    error.httpStatusCode = 400;
+    return next(error);
+  }
+  res.send(file);
+});
+
 
 // Função para instalar o multer
 const installMulter = () => {
