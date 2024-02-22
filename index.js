@@ -2,6 +2,16 @@ const { exec } = require('child_process');
 const fs = require('fs');
 const path = require('path');
 
+const express = require('express');
+const http = require('http');
+const socketIo = require('socket.io'); // Importe o socket.io aqui
+
+const app = express();
+const server = http.createServer(app);
+const io = socketIo(server); // Inicialize o socket.io aqui
+
+let messages = [];
+
 // Função para instalar o multer
 const installMulter = () => {
   return new Promise((resolve, reject) => {
@@ -96,16 +106,6 @@ function saveInimigosDaBolaMessages() {
     }
   });
 }
-
-const express = require('express');
-const http = require('http');
-const socketIo = require('socket.io');
-
-const app = express();
-const server = http.createServer(app);
-const io = socketIo(server); 
-
-let messages = [];
 
 // Carregar mensagens salvas
 fs.readFile('messages.json', (err, data) => {
