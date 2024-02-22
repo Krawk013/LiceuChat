@@ -102,7 +102,6 @@ inimigosDaBola.on('connection', (socket) => {
   });
 });
 
-
 // Funções para salvar mensagens em arquivos diferentes para cada sala
 function saveTerrorDeOPTMessages() {
   const messagesPath = path.join('/tmp', 'terror-de-opt-messages.json'); // Caminho para o diretório temporário
