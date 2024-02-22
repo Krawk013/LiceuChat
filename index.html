@@ -31,6 +31,13 @@
       <button type="button" onclick="clearMessages()">Apagar Todas</button>
     </form>
     <ul id="activeUsers"></ul> <!-- Lista de usuários ativos -->
+    <div id="roomSelection">
+      <label for="room">Selecione uma sala:</label>
+      <select name="room" id="room" onchange="changeRoom()">
+        <option value="terror-de-opt">Terror de OPT</option>
+        <option value="inimigos-da-bola">Inimigos da Bola</option>
+      </select>
+    </div>
   </div>
 
   <div id="schedule">
@@ -68,6 +75,12 @@
       } else {
         alert("Senha incorreta!");
       }
+    }
+
+    function changeRoom() {
+      var room = document.getElementById('room').value;
+      socket.emit('change room', room);
+      document.getElementById('messages').innerHTML = ''; // Clear messages when changing room
     }
 
     document.getElementById('form').addEventListener('submit', function(event) {
