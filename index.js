@@ -58,8 +58,7 @@ function startServer() {
   const http = require('http');
   const socketIo = require('socket.io');
 
-  // Restante do código...
-}
+
 
 
   const app = express();
