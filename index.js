@@ -4,7 +4,7 @@ const path = require('path');
 const express = require('express');
 const http = require('http');
 const socketIo = require('socket.io');
-const multer = require('multer'); // Adicionando Multer para upload de imagens
+const formidable = require('formidable');
 
 const app = express();
 const server = http.createServer(app);
@@ -12,57 +12,56 @@ const io = socketIo(server);
 
 let messages = [];
 
-
 const { exec } = require('child_process');
 
-// Função para instalar o módulo 'multer'
-const installMulter = () => {
+// Função para instalar o módulo 'formidable'
+const installFormidable = () => {
   return new Promise((resolve, reject) => {
-    exec('npm install multer', (error, stdout, stderr) => {
+    exec('npm install formidable', (error, stdout, stderr) => {
       if (error) {
-        console.error(`Error installing multer: ${error.message}`);
+        console.error(`Error installing formidable: ${error.message}`);
         reject(error);
         return;
       }
       if (stderr) {
-        console.error(`Error installing multer: ${stderr}`);
+        console.error(`Error installing formidable: ${stderr}`);
         reject(stderr);
         return;
       }
-      console.log(`multer installed successfully`);
+      console.log(`formidable installed successfully`);
       resolve();
     });
   });
 };
 
-// Instalar 'multer' se ainda não estiver instalado
-installMulter().catch(err => console.error(err));
-
-
-
-// Configuração do Multer para upload de imagens
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, 'uploads/'); // Diretório onde as imagens serão armazenadas
-  },
-  filename: function (req, file, cb) {
-    cb(null, Date.now() + '-' + file.originalname); // Nome do arquivo (timestamp + nome original)
-  }
-});
-
-const upload = multer({ storage: storage });
+// Instalar 'formidable' se ainda não estiver instalado
+installFormidable().catch(err => console.error(err));
 
 // Rota para lidar com o upload de imagens de perfil
-app.post('/upload', upload.single('profileImage'), (req, res, next) => {
-  const file = req.file;
-  if (!file) {
-    const error = new Error('Por favor, selecione um arquivo');
-    error.httpStatusCode = 400;
-    return next(error);
-  }
-  res.send(file);
-});
+app.post('/upload', (req, res) => {
+  const form = new formidable.IncomingForm();
+  form.uploadDir = path.join(__dirname, 'uploads');
+  form.keepExtensions = true;
 
+  form.parse(req, (err, fields, files) => {
+    if (err) {
+      res.status(500).json({ error: 'Something went wrong during file upload.' });
+      return;
+    }
+
+    const filePath = files.profileImage.path;
+    const fileName = files.profileImage.name;
+
+    fs.rename(filePath, path.join(form.uploadDir, fileName), (err) => {
+      if (err) {
+        res.status(500).json({ error: 'Failed to save uploaded file.' });
+        return;
+      }
+
+      res.status(200).json({ message: 'File uploaded successfully.' });
+    });
+  });
+});
 
 // Função para salvar as mensagens no arquivo
 function saveMessages() {
@@ -198,4 +197,3 @@ server.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`);
 });
 
-installMulter().catch(err => console.error(err));
