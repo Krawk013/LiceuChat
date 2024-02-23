@@ -1,7 +1,5 @@
 const { exec } = require('child_process');
 const fs = require('fs');
-const os = require('os');
-const path = require('path');
 
 // Função para instalar o pacote giphy-js-sdk-core
 const installGiphySDK = () => {
@@ -23,20 +21,16 @@ const installGiphySDK = () => {
   });
 };
 
-// Verifica se o pacote giphy-js-sdk-core está instalado
-try {
-  require.resolve('giphy-js-sdk-core');
-} catch (err) {
-  console.log('Installing giphy-js-sdk-core...');
-  // Instalar o pacote giphy-js-sdk-core no diretório atual
-  installGiphySDK().then(() => {
-    console.log('Dependencies installed successfully');
-    // Depois que o pacote é instalado com sucesso, prosseguimos com o restante do código
-    startServer();
-  }).catch(err => {
-    console.error('Error installing giphy-js-sdk-core:', err);
-  });
-}
+
+// Instalar o pacote giphy-js-sdk-core
+      installGiphySDK().then(() => {
+        console.log('Dependencies installed successfully');
+        // Depois que o pacote é instalado com sucesso, prosseguimos com o restante do código
+        startServer();
+      }).catch(err => {
+        console.error('Error installing giphy-js-sdk-core:', err);
+      });
+
 
 // Função para iniciar o servidor após a instalação das dependências
 function startServer() {
