@@ -10,6 +10,12 @@ const io = socketIO(server);
 // Array para armazenar os usuários e suas informações
 const users = [];
 
+// Definindo a política de segurança de conteúdo (CSP)
+app.use((req, res, next) => {
+  res.setHeader('Content-Security-Policy', "default-src 'self'");
+  next();
+});
+
 // Configuração de visualização e arquivos estáticos
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());
