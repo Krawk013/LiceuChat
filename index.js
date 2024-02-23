@@ -1,5 +1,7 @@
 const { exec } = require('child_process');
 const fs = require('fs');
+const os = require('os');
+const path = require('path');
 
 // Função para instalar o pacote giphy-js-sdk-core
 const installGiphySDK = () => {
@@ -26,29 +28,13 @@ try {
   require.resolve('giphy-js-sdk-core');
 } catch (err) {
   console.log('Installing giphy-js-sdk-core...');
-  // Tentar criar o diretório /workspace
-  fs.mkdir('/workspace', { recursive: true }, (err) => {
-    if (err) {
-      console.error('Error creating directory /workspace:', err);
-      return;
-    }
-    console.log('Directory /workspace created successfully');
-    // Conceder permissões de escrita ao diretório /workspace
-    fs.chmod('/workspace', 0o777, (err) => {
-      if (err) {
-        console.error('Error changing permissions of directory /workspace:', err);
-        return;
-      }
-      console.log('Permissions of directory /workspace changed successfully');
-      // Instalar o pacote giphy-js-sdk-core
-      installGiphySDK().then(() => {
-        console.log('Dependencies installed successfully');
-        // Depois que o pacote é instalado com sucesso, prosseguimos com o restante do código
-        startServer();
-      }).catch(err => {
-        console.error('Error installing giphy-js-sdk-core:', err);
-      });
-    });
+  // Instalar o pacote giphy-js-sdk-core no diretório atual
+  installGiphySDK().then(() => {
+    console.log('Dependencies installed successfully');
+    // Depois que o pacote é instalado com sucesso, prosseguimos com o restante do código
+    startServer();
+  }).catch(err => {
+    console.error('Error installing giphy-js-sdk-core:', err);
   });
 }
 
