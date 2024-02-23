@@ -1,41 +1,23 @@
-<!-- index.html -->
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Chat Online</title>
-  <style>
-    #messages { list-style-type: none; margin: 0; padding: 0; }
-    #messages li { padding: 5px 10px; }
-    #messages li:nth-child(odd) { background: #eee; }
-  </style>
+	<title>Chat</title>
+	<link rel="stylesheet" type="text/css" href="style.css">
 </head>
 <body>
-  <ul id="messages"></ul>
-  <form id="form" action="">
-    <input id="m" autocomplete="off" /><button type="submit">Send</button>
-  </form>
-  
-  <script src="/socket.io/socket.io.js"></script>
-  <script>
-    var socket = io();
-
-    document.getElementById('form').addEventListener('submit', function(event) {
-      event.preventDefault(); // Evita a recarga da página
-      var input = document.getElementById('m');
-      if (input.value.trim() !== '') { // Verifica se o campo de entrada não está vazio
-        socket.emit('chat message', input.value);
-        input.value = ''; // Limpa o campo de entrada após o envio da mensagem
-      }
-    });
-
-    socket.on('chat message', function(msg) {
-      var item = document.createElement('li');
-      item.textContent = msg;
-      document.getElementById('messages').appendChild(item);
-      window.scrollTo(0, document.body.scrollHeight);
-    });
-  </script>
+	<div id="chat-container">
+		<h1>Chat</h1>
+		<div id="chat-rooms">
+			<button id="principal-room">Sala Principal</button>
+			<button id="crias-room">Sala dos Crias</button>
+		</div>
+		<div id="chat-area"></div>
+		<form id="message-form">
+			<input type="text" id="message-input" placeholder="Digite sua mensagem...">
+			<input type="text" id="image-input" placeholder="Opcional: Insira o link de uma imagem...">
+			<button type="submit">Enviar</button>
+		</form>
+	</div>
+	<script src="script.js"></script>
 </body>
 </html>
