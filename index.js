@@ -1,24 +1,5 @@
-const { exec } = require('child_process');
-const fs = require('fs');
-
-const installMulter = () => {
-  return new Promise((resolve, reject) => {
-    exec('npm install multer', (error, stdout, stderr) => {
-      if (error) {
-        console.error(`Error installing multer: ${error.message}`);
-        reject(error);
-        return;
-      }
-      if (stderr) {
-        console.error(`Error installing multer: ${stderr}`);
-        reject(stderr);
-        return;
-      }
-      console.log(`multer installed successfully`);
-      resolve();
-    });
-  });
-};
+const Giphy = require('giphy-js-sdk-core');
+const giphy = Giphy('6U0FZT1gjNTHSpVhjC6KKe6n6hte0IVh'); // Substitua 'SUA_CHAVE_DE_API_DO_GIPHY' pela sua chave de API do Giphy
 
 const express = require('express');
 const http = require('http');
@@ -39,7 +20,19 @@ io.on('connection', (socket) => {
 
   socket.emit('chat history', messages);
 
-  socket.on('chat message', (msg) => {
+  socket.on('chat message', async (msg) => {
+    // Se imgUrl estiver presente na mensagem, buscar um GIF correspondente no Giphy
+    if (msg.imgUrl) {
+      try {
+        const response = await giphy.search('gifs', { q: msg.imgUrl, limit: 1 });
+        if (response.data.length > 0) {
+          msg.imgUrl = response.data[0].images.fixed_height.url;
+        }
+      } catch (error) {
+        console.error('Error fetching GIF from Giphy:', error);
+      }
+    }
+    
     messages.push(msg);
     io.emit('chat message', msg);
     saveMessages();
@@ -64,5 +57,3 @@ const PORT = process.env.PORT || 8080;
 server.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`);
 });
-
-installMulter().catch(err => console.error(err));
