@@ -62,26 +62,6 @@ app.post('/upload', upload.single('profileImage'), (req, res, next) => {
 });
 
 
-// Função para instalar o multer
-const installMulter = () => {
-  return new Promise((resolve, reject) => {
-    exec('npm install multer', (error, stdout, stderr) => {
-      if (error) {
-        console.error(`Error installing multer: ${error.message}`);
-        reject(error);
-        return;
-      }
-      if (stderr) {
-        console.error(`Error installing multer: ${stderr}`);
-        reject(stderr);
-        return;
-      }
-      console.log(`multer installed successfully`);
-      resolve();
-    });
-  });
-};
-
 // Função para salvar as mensagens no arquivo
 function saveMessages() {
   const messagesPath = path.join('/tmp', 'messages.json'); // Caminho para o diretório temporário
