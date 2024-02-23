@@ -13,7 +13,6 @@ const io = socketIo(server);
 
 let messages = [];
 
-const { exec } = require('child_process');
 
 // Função para instalar o módulo 'multer'
 const installMulter = () => {
