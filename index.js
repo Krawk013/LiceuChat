@@ -14,20 +14,31 @@ const io = socketIo(server);
 let messages = [];
 
 
-const npm = require('npm-programmatic');
+const { exec } = require('child_process');
 
 // Função para instalar o módulo 'multer'
-const installMulter = async () => {
-  try {
-    await npm.install(['multer']);
-    console.log('multer installed successfully');
-  } catch (error) {
-    console.error(`Error installing multer: ${error}`);
-  }
+const installMulter = () => {
+  return new Promise((resolve, reject) => {
+    exec('npm install multer', (error, stdout, stderr) => {
+      if (error) {
+        console.error(`Error installing multer: ${error.message}`);
+        reject(error);
+        return;
+      }
+      if (stderr) {
+        console.error(`Error installing multer: ${stderr}`);
+        reject(stderr);
+        return;
+      }
+      console.log(`multer installed successfully`);
+      resolve();
+    });
+  });
 };
 
 // Instalar 'multer' se ainda não estiver instalado
-installMulter();
+installMulter().catch(err => console.error(err));
+
 
 
 // Configuração do Multer para upload de imagens
