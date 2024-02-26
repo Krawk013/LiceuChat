@@ -1,7 +1,7 @@
 const { exec } = require('child_process');
 
 // Define o diretório onde o npm será executado
-const npmDirectory = '/workspace';
+const npmDirectory = '/.github';
 
 // Comando para instalar o pacote giphy-js-sdk-core
 const npmCommand = 'npm install giphy-js-sdk-core';
